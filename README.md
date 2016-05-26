@@ -2,7 +2,7 @@
 
 *A mostly reasonable approach to JavaScript*
 
-Based on [Airbnb's Javascript style guide](https://github.com/airbnb/javascript) with some tweaks to suit [Bitmatica](https://www.bitmatica.com/)'s needs.
+Based on [Airbnb's Javascript style guide](https://github.com/airbnb/javascript) with some [tweaks](#differences-from-airbnb-style-guide) to suit [Bitmatica](https://www.bitmatica.com/)'s needs.
 
 Other Style Guides
  - [ES5](es5/)
