@@ -2269,7 +2269,7 @@ Other Style Guides
     ```
 
   <a name="coercion--numbers"></a><a name="21.3"></a>
-  - [21.3](#coercion--numbers) Numbers: Use `Number` for type casting and `parseInt` always with a radix for parsing strings. eslint: [`radix`](http://eslint.org/docs/rules/radix)
+  - [21.3](#coercion--numbers) Numbers: Use `Number` for type casting and `parseInt` for parsing strings. eslint: [`radix`](http://eslint.org/docs/rules/radix)
 
     ```javascript
     const inputValue = "4";
@@ -2283,14 +2283,11 @@ Other Style Guides
     // bad
     const val = inputValue >> 0;
 
-    // bad
-    const val = parseInt(inputValue);
-
     // good
     const val = Number(inputValue);
 
     // good
-    const val = parseInt(inputValue, 10);
+    const val = parseInt(inputValue);
     ```
 
   <a name="coercion--comment-deviations"></a><a name="21.4"></a>
@@ -2949,5 +2946,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   * A single leading underscore is acceptable in identifiers to indicate an attribute is intended to be "private".
   * Don't prohibit string concatenation. Template strings are usually, but not always, preferable.
   * Don't prohibit use of `arguments`. Rest params `...args` are usually, but not always, preferable.
+  * Don't require a radix with `parseInt`. That hasn't been needed since ES5.
 
 # };
