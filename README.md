@@ -2391,18 +2391,18 @@ Other Style Guides
     ```
 
   <a name="naming--leading-underscore"></a><a name="22.4"></a>
-  - [22.4](#naming--leading-underscore) Do not use trailing or leading underscores. eslint: [`no-underscore-dangle`](http://eslint.org/docs/rules/no-underscore-dangle.html) jscs: [`disallowDanglingUnderscores`](http://jscs.info/rule/disallowDanglingUnderscores)
+  - [22.4](#naming--leading-underscore) Do not use trailing or leading underscores, except for a single leading underscore to indicate a "private" attribute. eslint: [`no-underscore-dangle`](http://eslint.org/docs/rules/no-underscore-dangle.html) jscs: [`disallowDanglingUnderscores`](http://jscs.info/rule/disallowDanglingUnderscores)
 
-    > Why? JavaScript does not have the concept of privacy in terms of properties or methods. Although a leading underscore is a common convention to mean “private”, in fact, these properties are fully public, and as such, are part of your public API contract. This convention might lead developers to wrongly think that a change won't count as breaking, or that tests aren't needed. tl;dr: if you want something to be “private”, it must not be observably present.
+    > Bitmitca sometimes uses the common convention of a single leading underscore to indicate that a property or method is intended to be "private". Be aware, though, JavaScript does not have the concept of privacy in terms of properties or methods. These properties are fully public, and as such, are part of your public API contract. Don't think that a change won't count as breaking, or that tests aren't needed.
 
     ```javascript
     // bad
     this.__firstName__ = "Panda";
     this.firstName_ = "Panda";
-    this._firstName = "Panda";
 
     // good
     this.firstName = "Panda";
+    this._firstName = "Panda";
     ```
 
   <a name="naming--self-this"></a><a name="22.5"></a>
@@ -2946,5 +2946,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
   * Use double quotes `""` instead of single quotes `''` for strings.
   * Do not add spaces inside of curly braces.
+  * A single leading underscore is acceptable in identifiers to indicate an attribute is intended to be "private".
 
 # };
