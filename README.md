@@ -634,7 +634,7 @@ Other Style Guides
     ```
 
   <a name="es6-rest"></a><a name="7.6"></a>
-  - [7.6](#es6-rest) Never use `arguments`, opt to use rest syntax `...` instead. eslint: [`prefer-rest-params`](http://eslint.org/docs/rules/prefer-rest-params)
+  - [7.6](#es6-rest) Prefer the rest syntax `...` to the use of `arguments`. eslint: [`prefer-rest-params`](http://eslint.org/docs/rules/prefer-rest-params)
 
     > Why? `...` is explicit about which arguments you want pulled. Plus, rest arguments are a real Array, and not merely Array-like like `arguments`.
 
@@ -2948,5 +2948,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   * Do not add spaces inside of curly braces.
   * A single leading underscore is acceptable in identifiers to indicate an attribute is intended to be "private".
   * Don't prohibit string concatenation. Template strings are usually, but not always, preferable.
+  * Don't prohibit use of `arguments`. Rest params `...args` are usually, but not always, preferable.
 
 # };
