@@ -158,13 +158,13 @@ Other Style Guides
     ```javascript
     // bad
     const superman = {
-      default: { clark: "kent" },
+      default: {clark: "kent"},
       private: true,
     };
 
     // good
     const superman = {
-      defaults: { clark: "kent" },
+      defaults: {clark: "kent"},
       hidden: true,
     };
     ```
@@ -391,7 +391,7 @@ Other Style Guides
 
     // bad
     inbox.filter((msg) => {
-      const { subject, author } = msg;
+      const {subject, author} = msg;
       if (subject === "Mockingbird") {
         return author === "Harper Lee";
       } else {
@@ -401,7 +401,7 @@ Other Style Guides
 
     // good
     inbox.filter((msg) => {
-      const { subject, author } = msg;
+      const {subject, author} = msg;
       if (subject === "Mockingbird") {
         return author === "Harper Lee";
       }
@@ -430,12 +430,12 @@ Other Style Guides
 
     // good
     function getFullName(user) {
-      const { firstName, lastName } = user;
+      const {firstName, lastName} = user;
       return `${firstName} ${lastName}`;
     }
 
     // best
-    function getFullName({ firstName, lastName }) {
+    function getFullName({firstName, lastName}) {
       return `${firstName} ${lastName}`;
     }
     ```
@@ -472,11 +472,11 @@ Other Style Guides
     // good
     function processInput(input) {
       // then a miracle occurs
-      return { left, right, top, bottom };
+      return {left, right, top, bottom};
     }
 
     // the caller selects only the data they need
-    const { left, top } = processInput(input);
+    const {left, top} = processInput(input);
     ```
 
 
@@ -1085,7 +1085,7 @@ Other Style Guides
     export default AirbnbStyleGuide.es6;
 
     // best
-    import { es6 } from "./AirbnbStyleGuide";
+    import {es6} from "./AirbnbStyleGuide";
     export default es6;
     ```
 
@@ -1110,11 +1110,11 @@ Other Style Guides
     ```javascript
     // bad
     // filename es6.js
-    export { es6 as default } from "./airbnbStyleGuide";
+    export {es6 as default} from "./airbnbStyleGuide";
 
     // good
     // filename es6.js
-    import { es6 } from "./AirbnbStyleGuide";
+    import {es6} from "./AirbnbStyleGuide";
     export default es6;
     ```
 
@@ -1127,10 +1127,10 @@ Other Style Guides
     // bad
     import foo from "foo";
     // … some other imports … //
-    import { named1, named2 } from "foo";
+    import {named1, named2} from "foo";
 
     // good
-    import foo, { named1, named2 } from "foo";
+    import foo, {named1, named2} from "foo";
 
     // good
     import foo, {
@@ -1147,11 +1147,11 @@ Other Style Guides
     ```javascript
     // bad
     let foo = 3;
-    export { foo }
+    export {foo}
 
     // good
     const foo = 3;
-    export { foo }
+    export {foo}
     ```
 
   <a name="modules--prefer-default-export"></a>
@@ -2093,14 +2093,16 @@ Other Style Guides
     ```
 
   <a name="whitespace--in-braces"></a><a name="18.11"></a>
-  - [18.11](#whitespace--in-braces) Add spaces inside curly braces. eslint: [`object-curly-spacing`](http://eslint.org/docs/rules/object-curly-spacing.html) jscs: [`disallowSpacesInsideObjectBrackets`](http://jscs.info/rule/disallowSpacesInsideObjectBrackets)
+  - [18.11](#whitespace--in-braces) Do not add spaces inside curly braces. eslint: [`object-curly-spacing`](http://eslint.org/docs/rules/object-curly-spacing.html) jscs: [`disallowSpacesInsideObjectBrackets`](http://jscs.info/rule/disallowSpacesInsideObjectBrackets)
+
+    > Bitmatica changed this rule for consistency with (the lack of) spaces in parantheses and brackets.
 
     ```javascript
     // bad
-    const foo = {clark: "kent"};
+    const foo = { clark: "kent" };
 
     // good
-    const foo = { clark: "kent" };
+    const foo = {clark: "kent"};
     ```
 
   <a name="whitespace--max-len"></a><a name="18.12"></a>
@@ -2113,7 +2115,7 @@ Other Style Guides
     const foo = "Whatever national crop flips the window. The cartoon reverts within the screw. Whatever wizard constrains a helpful ally. The counterpart ascends!";
 
     // bad
-    $.ajax({ method: "POST", url: "https://airbnb.com/", data: { name: "John" } }).done(() => console.log("Congratulations!")).fail(() => console.log("You have failed this city."));
+    $.ajax({method: "POST", url: "https://airbnb.com/", data: {name: "John"}}).done(() => console.log("Congratulations!")).fail(() => console.log("You have failed this city."));
 
     // good
     const foo = "Whatever national crop flips the window. The cartoon reverts within the screw. " +
@@ -2123,7 +2125,7 @@ Other Style Guides
     $.ajax({
       method: "POST",
       url: "https://airbnb.com/",
-      data: { name: "John" },
+      data: {name: "John"},
     })
       .done(() => console.log("Congratulations!"))
       .fail(() => console.log("You have failed this city."));
@@ -2573,7 +2575,7 @@ Other Style Guides
 
     ```javascript
     // good
-    $(this).trigger("listingUpdated", { listingId: listing.id });
+    $(this).trigger("listingUpdated", {listingId: listing.id });
 
     ...
 
@@ -2943,5 +2945,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ## Differences from Airbnb Style Guide
 
   * Use double quotes `""` instead of single quotes `''` for strings.
+  * Do not add spaces inside of curly braces.
 
 # };
