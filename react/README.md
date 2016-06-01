@@ -30,35 +30,36 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
 
 ## Class vs `React.createClass` vs stateless
 
-  - If you have internal state and/or refs, prefer `class extends React.Component` over `React.createClass` unless you have a very good reason to use mixins. eslint: [`react/prefer-es6-class`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-es6-class.md) [`react/prefer-stateless-function`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-stateless-function.md)
+  - If you have internal state and/or refs, use `React.createClass`. Avoid `class extends React.Component` as it does not yet support nice features like mixins and method auto-binding. eslint: [`react/prefer-es6-class`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-es6-class.md) [`react/prefer-stateless-function`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-stateless-function.md)
 
     ```jsx
     // bad
+    class Listing extends React.Component {
+      // ...
+      render() {
+        return <div>{this.state.hello}</div>;
+      }
+    }
+
+    // good
     const Listing = React.createClass({
       // ...
       render() {
         return <div>{this.state.hello}</div>;
       }
     });
+    ```
 
-    // good
-    class Listing extends React.Component {
+    And if you don't have state or refs, consider normal functions (not arrow functions) over classes:
+
+    ```jsx
+    // okay
+    const Listing = React.createClass({
       // ...
       render() {
         return <div>{this.state.hello}</div>;
       }
-    }
-    ```
-
-    And if you don't have state or refs, prefer normal functions (not arrow functions) over classes:
-
-    ```jsx
-    // bad
-    class Listing extends React.Component {
-      render() {
-        return <div>{this.props.hello}</div>;
-      }
-    }
+    });
 
     // bad (relying on function name inference is discouraged)
     const Listing = ({ hello }) => (
@@ -536,6 +537,8 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
 
 ## Differences from Airbnb Style Guide
 
-  * Allow multiple components in the same file.
+  - Allow multiple components in the same file.
+  - Use `React.createClass` instead of `class extends React.Component`.
+  - Allow (but don't require) stateless React functions.
 
 **[⬆ back to top](#table-of-contents)**
