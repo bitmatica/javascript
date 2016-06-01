@@ -464,8 +464,8 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   1. `componentWillUpdate`
   1. `componentDidUpdate`
   1. `componentWillUnmount`
+  1. *any other methods or properties*
   1. *clickHandlers or eventHandlers* like `onClickSubmit()` or `onChangeDescription()`
-  1. *getter methods for `render`* like `getSelectReason()` or `getFooterContent()`
   1. *Optional render methods* like `renderNavigation()` or `renderProfilePicture()`
   1. `render`
 
@@ -519,8 +519,8 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   1. `componentWillUpdate`
   1. `componentDidUpdate`
   1. `componentWillUnmount`
+  1. *any other methods or properties*
   1. *clickHandlers or eventHandlers* like `onClickSubmit()` or `onChangeDescription()`
-  1. *getter methods for `render`* like `getSelectReason()` or `getFooterContent()`
   1. *Optional render methods* like `renderNavigation()` or `renderProfilePicture()`
   1. `render`
 
@@ -545,5 +545,6 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   - Allow (but don't require) stateless React functions.
   - Use `.js`, not `.jsx`, for React component files.
   - Include explicit `true` values in JSX attributes.
+  - For component ordering, move miscellaneous methods/properties above event handlers and remove getter/setter group.
 
 **[⬆ back to top](#table-of-contents)**
