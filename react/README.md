@@ -219,17 +219,17 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     />
     ```
 
-  - Omit the value of the prop when it is explicitly `true`. eslint: [`react/jsx-boolean-value`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md)
+  - Always include the value of the prop when it is explicitly `true`. eslint: [`react/jsx-boolean-value`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md)
 
     ```jsx
     // bad
     <Foo
-      hidden={true}
+      hidden
     />
 
     // good
     <Foo
-      hidden
+      hidden={true}
     />
     ```
 
@@ -544,5 +544,6 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   - Use `React.createClass` instead of `class extends React.Component`.
   - Allow (but don't require) stateless React functions.
   - Use `.js`, not `.jsx`, for React component files.
+  - Include explicit `true` values in JSX attributes.
 
 **[⬆ back to top](#table-of-contents)**
