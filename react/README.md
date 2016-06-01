@@ -427,13 +427,13 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     });
 
     // good
-    class extends React.Component {
+    React.createClass({
       onClickSubmit() {
         // do stuff
-      }
+      },
 
       // other stuff
-    }
+    });
     ```
 
   - Be sure to return a value in your `render` methods. eslint: [`require-render-return`](https://github.com/yannickcr/eslint-plugin-react/pull/502)
