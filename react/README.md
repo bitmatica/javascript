@@ -1,6 +1,8 @@
-# Airbnb React/JSX Style Guide
+# Bitmatica React/JSX Style Guide
 
 *A mostly reasonable approach to React and JSX*
+
+Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/tree/master/react) with some [tweaks](#differences-from-airbnb-style-guide) to suit [Bitmatica](https://www.bitmatica.com/)'s needs.
 
 ## Table of Contents
 
@@ -17,6 +19,7 @@
   1. [Methods](#methods)
   1. [Ordering](#ordering)
   1. [`isMounted`](#ismounted)
+  1. [Differences from Airbnb Style Guide](#differences-from-airbnb-style-guide)
 
 ## Basic Rules
 
@@ -530,5 +533,7 @@
   This JSX/React style guide is also available in other languages:
 
   - ![cn](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/China.png) **Chinese (Simplified)**: [JasonBoy/javascript](https://github.com/JasonBoy/javascript/tree/master/react)
+
+## Differences from Airbnb Style Guide
 
 **[⬆ back to top](#table-of-contents)**
