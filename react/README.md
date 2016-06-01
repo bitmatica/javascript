@@ -74,8 +74,8 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
 
 ## Naming
 
-  - **Extensions**: Use `.jsx` extension for React components.
-  - **Filename**: Use PascalCase for filenames. E.g., `ReservationCard.jsx`.
+  - **Extensions**: Use `.js` extension for React component files.
+  - **Filename**: Use PascalCase for filenames. E.g., `ReservationCard.js`.
   - **Reference Naming**: Use PascalCase for React components and camelCase for their instances. eslint: [`react/jsx-pascal-case`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-pascal-case.md)
 
     ```jsx
@@ -540,5 +540,6 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   - Allow multiple components in the same file.
   - Use `React.createClass` instead of `class extends React.Component`.
   - Allow (but don't require) stateless React functions.
+  - Use `.js`, not `.jsx`, for React component files.
 
 **[⬆ back to top](#table-of-contents)**
