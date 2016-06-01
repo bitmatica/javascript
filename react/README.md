@@ -117,8 +117,11 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     });
 
     // good
-    export default class ReservationCard extends React.Component {
-    }
+    const ReservationCard = React.createClass({
+      // stuff goes here
+    });
+
+    export default ReservationCard;
     ```
 
 ## Alignment
