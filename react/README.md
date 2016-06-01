@@ -380,7 +380,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     }
     ```
 
-  - Bind event handlers for the render method in the constructor. eslint: [`react/jsx-no-bind`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
+  - When using ES6 class components, bind event handlers for the render method in the constructor. eslint: [`react/jsx-no-bind`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
 
   > Why? A bind call in the render path creates a brand new function on every single render.
 
