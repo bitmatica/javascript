@@ -4,16 +4,20 @@
 
 Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/tree/master/react) with some [tweaks](#differences-from-airbnb-style-guide) to suit [Bitmatica](https://www.bitmatica.com/)'s needs.
 
+This style guide is mostly based on the standards that are currently prevalent in JavaScript, although some conventions (i.e async/await or static class fields) may still be included or prohibited on a case-by-case basis. Currently, anything prior to stage 3 is not included nor recommended in this guide.
+
 ## Table of Contents
 
   1. [Basic Rules](#basic-rules)
   1. [Class vs `React.createClass` vs stateless](#class-vs-reactcreateclass-vs-stateless)
+  1. [Mixins](#mixins)
   1. [Naming](#naming)
   1. [Declaration](#declaration)
   1. [Alignment](#alignment)
   1. [Quotes](#quotes)
   1. [Spacing](#spacing)
   1. [Props](#props)
+  1. [Refs](#refs)
   1. [Parentheses](#parentheses)
   1. [Tags](#tags)
   1. [Methods](#methods)
@@ -26,7 +30,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   - Prefer only one React component per file.
     - However, if a component is small and only used inside one other component, it is acceptable to include the parent and child components in the same file. eslint: [`react/no-multi-comp`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-multi-comp.md).
   - Always use JSX syntax.
-  - Do not use `React.createElement` unless you're initializing the app from a file that is not JSX.
+  - Do not use `React.createElement` unless you’re initializing the app from a file that is not JSX.
 
 ## Class vs `React.createClass` vs stateless
 
@@ -50,7 +54,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     });
     ```
 
-    And if you don't have state or refs, consider normal functions (not arrow functions) over classes:
+    And if you don’t have state or refs, prefer normal functions (not arrow functions) over classes:
 
     ```jsx
     // okay
@@ -72,10 +76,16 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     }
     ```
 
+## Mixins
+
+  - [Do not use mixins](https://facebook.github.io/react/blog/2016/07/13/mixins-considered-harmful.html).
+
+  > Why? Mixins introduce implicit dependencies, cause name clashes, and cause snowballing complexity. Most use cases for mixins can be accomplished in better ways via components, higher-order components, or utility modules.
+
 ## Naming
 
-  - **Extensions**: Use `.js` extension for React component files.
-  - **Filename**: Use PascalCase for filenames. E.g., `ReservationCard.js`.
+  - **Extensions**: Use `.jsx` extension for React components. eslint: [`react/jsx-filename-extension`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-filename-extension.md)
+  - **Filename**: Use PascalCase for filenames. E.g., `ReservationCard.jsx`.
   - **Reference Naming**: Use PascalCase for React components and camelCase for their instances. eslint: [`react/jsx-pascal-case`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-pascal-case.md)
 
     ```jsx
@@ -104,6 +114,47 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     // good
     import Footer from './Footer';
     ```
+  - **Higher-order Component Naming**: Use a composite of the higher-order component’s name and the passed-in component’s name as the `displayName` on the generated component. For example, the higher-order component `withFoo()`, when passed a component `Bar` should produce a component with a `displayName` of `withFoo(Bar)`.
+
+    > Why? A component’s `displayName` may be used by developer tools or in error messages, and having a value that clearly expresses this relationship helps people understand what is happening.
+
+    ```jsx
+    // bad
+    export default function withFoo(WrappedComponent) {
+      return function WithFoo(props) {
+        return <WrappedComponent {...props} foo />;
+      }
+    }
+
+    // good
+    export default function withFoo(WrappedComponent) {
+      function WithFoo(props) {
+        return <WrappedComponent {...props} foo />;
+      }
+
+      const wrappedComponentName = WrappedComponent.displayName
+        || WrappedComponent.name
+        || 'Component';
+
+      WithFoo.displayName = `withFoo(${wrappedComponentName})`;
+      return WithFoo;
+    }
+    ```
+
+  - **Props Naming**: Avoid using DOM component prop names for different purposes.
+
+    > Why? People expect props like `style` and `className` to mean one specific thing. Varying this API for a subset of your app makes the code less readable and less maintainable, and may cause bugs.
+
+    ```jsx
+    // bad
+    <MyComponent style="fancy" />
+
+    // bad
+    <MyComponent className="fancy" />
+
+    // good
+    <MyComponent variant="fancy" />
+    ```
 
 ## Declaration
 
@@ -126,7 +177,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
 
 ## Alignment
 
-  - Follow these alignment styles for JSX syntax. eslint: [`react/jsx-closing-bracket-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md)
+  - Follow these alignment styles for JSX syntax. eslint: [`react/jsx-closing-bracket-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md) [`react/jsx-closing-tag-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-tag-location.md)
 
     ```jsx
     // bad
@@ -149,14 +200,32 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     >
       <Quux />
     </Foo>
+
+    // bad
+    {showButton &&
+      <Button />
+    }
+
+    // bad
+    {
+      showButton &&
+        <Button />
+    }
+
+    // good
+    {showButton && (
+      <Button />
+    )}
+
+    // good
+    {showButton && <Button />}
     ```
 
 ## Quotes
 
   - Always use double quotes (`"`) for JSX attributes. eslint: [`jsx-quotes`](http://eslint.org/docs/rules/jsx-quotes)
 
-  > Why? JSX attributes [can't contain escaped quotes](http://eslint.org/docs/rules/jsx-quotes), so double quotes make conjunctions like `"don't"` easier to type.
-  > Regular HTML attributes also typically use double quotes instead of single, so JSX attributes mirror this convention.
+    > Why? Regular HTML attributes also typically use double quotes instead of single, so JSX attributes mirror this convention.
 
     ```jsx
     // bad
@@ -174,7 +243,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
 
 ## Spacing
 
-  - Always include a single space in your self-closing tag.
+  - Always include a single space in your self-closing tag. eslint: [`no-multi-spaces`](https://eslint.org/docs/rules/no-multi-spaces), [`react/jsx-tag-spacing`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-tag-spacing.md)
 
     ```jsx
     // bad
@@ -231,9 +300,12 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     <Foo
       hidden={true}
     />
+
+    // good
+    <Foo hidden />
     ```
 
-  - Always include an `alt` prop on `<img>` tags. If the image is presentational, `alt` can be an empty string or the `<img>` must have `role="presentation"`. eslint: [`jsx-a11y/img-has-alt`](https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/img-has-alt.md)
+  - Always include an `alt` prop on `<img>` tags. If the image is presentational, `alt` can be an empty string or the `<img>` must have `role="presentation"`. eslint: [`jsx-a11y/alt-text`](https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/alt-text.md)
 
     ```jsx
     // bad
@@ -251,7 +323,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
 
   - Do not use words like "image", "photo", or "picture" in `<img>` `alt` props. eslint: [`jsx-a11y/img-redundant-alt`](https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/img-redundant-alt.md)
 
-  > Why? Screenreaders already announce `img` elements as images, so there is no need to include this information in the alt text.
+    > Why? Screenreaders already announce `img` elements as images, so there is no need to include this information in the alt text.
 
     ```jsx
     // bad
@@ -261,7 +333,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     <img src="hello.jpg" alt="Me waving hello" />
     ```
 
-  - Use only valid, non-abstract [ARIA roles](https://www.w3.org/TR/wai-aria/roles#role_definitions). eslint: [`jsx-a11y/aria-role`](https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/aria-role.md)
+  - Use only valid, non-abstract [ARIA roles](https://www.w3.org/TR/wai-aria/#usage_intro). eslint: [`jsx-a11y/aria-role`](https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/aria-role.md)
 
     ```jsx
     // bad - not an ARIA role
@@ -286,7 +358,11 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   <div />
   ```
 
-  - Avoid using an array index as `key` prop, prefer a unique ID. ([why?](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318))
+  - Avoid using an array index as `key` prop, prefer a stable ID. eslint: [`react/no-array-index-key`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-array-index-key.md)
+
+> Why? Not using a stable ID [is an anti-pattern](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318) because it can negatively impact performance and cause issues with component state.
+
+We don’t recommend using indexes for keys if the order of items may change.
 
   ```jsx
   // bad
@@ -298,22 +374,120 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   )}
 
   // good
-  {todos.map((todo) =>
+  {todos.map(todo => (
     <Todo
       {...todo}
       key={todo.id}
     />
-  )}
+  ))}
   ```
+
+  - Always define explicit defaultProps for all non-required props.
+
+  > Why? propTypes are a form of documentation, and providing defaultProps means the reader of your code doesn’t have to assume as much. In addition, it can mean that your code can omit certain type checks.
+
+  ```jsx
+  // bad
+  function SFC({ foo, bar, children }) {
+    return <div>{foo}{bar}{children}</div>;
+  }
+  SFC.propTypes = {
+    foo: PropTypes.number.isRequired,
+    bar: PropTypes.string,
+    children: PropTypes.node,
+  };
+
+  // good
+  function SFC({ foo, bar, children }) {
+    return <div>{foo}{bar}{children}</div>;
+  }
+  SFC.propTypes = {
+    foo: PropTypes.number.isRequired,
+    bar: PropTypes.string,
+    children: PropTypes.node,
+  };
+  SFC.defaultProps = {
+    bar: '',
+    children: null,
+  };
+  ```
+
+  - Use spread props sparingly.
+  > Why? Otherwise you’re more likely to pass unnecessary props down to components. And for React v15.6.1 and older, you could [pass invalid HTML attributes to the DOM](https://reactjs.org/blog/2017/09/08/dom-attributes-in-react-16.html).
+
+  Exceptions:
+
+  - HOCs that proxy down props and hoist propTypes
+
+  ```jsx
+  function HOC(WrappedComponent) {
+    return class Proxy extends React.Component {
+      Proxy.propTypes = {
+        text: PropTypes.string,
+        isLoading: PropTypes.bool
+      };
+
+      render() {
+        return <WrappedComponent {...this.props} />
+      }
+    }
+  }
+  ```
+
+  - Spreading objects with known, explicit props. This can be particularly useful when testing React components with Mocha’s beforeEach construct.
+
+  ```jsx
+  export default function Foo {
+    const props = {
+      text: '',
+      isPublished: false
+    }
+
+    return (<div {...props} />);
+  }
+  ```
+
+  Notes for use:
+  Filter out unnecessary props when possible. Also, use [prop-types-exact](https://www.npmjs.com/package/prop-types-exact) to help prevent bugs.
+
+  ```jsx
+  // bad
+  render() {
+    const { irrelevantProp, ...relevantProps  } = this.props;
+    return <WrappedComponent {...this.props} />
+  }
+
+  // good
+  render() {
+    const { irrelevantProp, ...relevantProps  } = this.props;
+    return <WrappedComponent {...relevantProps} />
+  }
+  ```
+
+## Refs
+
+  - Always use ref callbacks. eslint: [`react/no-string-refs`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-string-refs.md)
+
+    ```jsx
+    // bad
+    <Foo
+      ref="myRef"
+    />
+
+    // good
+    <Foo
+      ref={(ref) => { this.myRef = ref; }}
+    />
+    ```
 
 ## Parentheses
 
-  - Wrap JSX tags in parentheses when they span more than one line. eslint: [`react/wrap-multilines`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/wrap-multilines.md)
+  - Wrap JSX tags in parentheses when they span more than one line. eslint: [`react/jsx-wrap-multilines`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-wrap-multilines.md)
 
     ```jsx
     // bad
     render() {
-      return <MyComponent className="long body" foo="bar">
+      return <MyComponent variant="long body" foo="bar">
                <MyChild />
              </MyComponent>;
     }
@@ -321,7 +495,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     // good
     render() {
       return (
-        <MyComponent className="long body" foo="bar">
+        <MyComponent variant="long body" foo="bar">
           <MyChild />
         </MyComponent>
       );
@@ -340,10 +514,10 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
 
     ```jsx
     // bad
-    <Foo className="stuff"></Foo>
+    <Foo variant="stuff"></Foo>
 
     // good
-    <Foo className="stuff" />
+    <Foo variant="stuff" />
     ```
 
   - If your component has multi-line properties, close its tag on a new line. eslint: [`react/jsx-closing-bracket-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md)
@@ -382,7 +556,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
 
   - When using ES6 class components, bind event handlers for the render method in the constructor. eslint: [`react/jsx-no-bind`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md)
 
-  > Why? A bind call in the render path creates a brand new function on every single render.
+    > Why? A bind call in the render path creates a brand new function on every single render.
 
     ```jsx
     // bad
@@ -392,7 +566,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
       }
 
       render() {
-        return <div onClick={this.onClickDiv.bind(this)} />
+        return <div onClick={this.onClickDiv.bind(this)} />;
       }
     }
 
@@ -409,12 +583,13 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
       }
 
       render() {
-        return <div onClick={this.onClickDiv} />
+        return <div onClick={this.onClickDiv} />;
       }
     }
     ```
 
   - Do not use underscore prefix for internal methods of a React component.
+    > Why? Underscore prefixes are sometimes used as a convention in other languages to denote privacy. But, unlike those languages, there is no native support for privacy in JavaScript, everything is public. Regardless of your intentions, adding underscore prefixes to your properties does not actually make them private, and any property (underscore-prefixed or not) should be treated as being public. See issues [#1024](https://github.com/airbnb/javascript/issues/1024), and [#490](https://github.com/airbnb/javascript/issues/490) for a more in-depth discussion.
 
     ```jsx
     // bad
@@ -436,7 +611,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
     });
     ```
 
-  - Be sure to return a value in your `render` methods. eslint: [`require-render-return`](https://github.com/yannickcr/eslint-plugin-react/pull/502)
+  - Be sure to return a value in your `render` methods. eslint: [`react/require-render-return`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/require-render-return.md)
 
     ```jsx
     // bad
@@ -466,13 +641,14 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   1. `componentWillUnmount`
   1. *any other methods or properties*
   1. *clickHandlers or eventHandlers* like `onClickSubmit()` or `onChangeDescription()`
-  1. *Optional render methods* like `renderNavigation()` or `renderProfilePicture()`
+  1. *optional render methods* like `renderNavigation()` or `renderProfilePicture()`
   1. `render`
 
   - How to define `propTypes`, `defaultProps`, `contextTypes`, etc...
 
     ```jsx
-    import React, { PropTypes } from 'react';
+    import React from 'react';
+    import PropTypes from 'prop-types';
 
     const propTypes = {
       id: PropTypes.number.isRequired,
@@ -490,7 +666,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
       }
 
       render() {
-        return <a href={this.props.url} data-id={this.props.id}>{this.props.text}</a>
+        return <a href={this.props.url} data-id={this.props.id}>{this.props.text}</a>;
       }
     }
 
@@ -521,7 +697,7 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   1. `componentWillUnmount`
   1. *any other methods or properties*
   1. *clickHandlers or eventHandlers* like `onClickSubmit()` or `onChangeDescription()`
-  1. *Optional render methods* like `renderNavigation()` or `renderProfilePicture()`
+  1. *optional render methods* like `renderNavigation()` or `renderProfilePicture()`
   1. `render`
 
 ## `isMounted`
@@ -537,13 +713,23 @@ Based on [Airbnb's React/JSX style guide](https://github.com/airbnb/javascript/t
   This JSX/React style guide is also available in other languages:
 
   - ![cn](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/China.png) **Chinese (Simplified)**: [JasonBoy/javascript](https://github.com/JasonBoy/javascript/tree/master/react)
+  - ![tw](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Taiwan.png) **Chinese (Traditional)**: [jigsawye/javascript](https://github.com/jigsawye/javascript/tree/master/react)
+  - ![es](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Spain.png) **Español**: [agrcrobles/javascript](https://github.com/agrcrobles/javascript/tree/master/react)
+  - ![jp](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Japan.png) **Japanese**: [mitsuruog/javascript-style-guide](https://github.com/mitsuruog/javascript-style-guide/tree/master/react)
+  - ![kr](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/South-Korea.png) **Korean**: [apple77y/javascript](https://github.com/apple77y/javascript/tree/master/react)
+  - ![pl](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Poland.png) **Polish**: [pietraszekl/javascript](https://github.com/pietraszekl/javascript/tree/master/react)
+  - ![Br](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Brazil.png) **Portuguese**: [ronal2do/javascript](https://github.com/ronal2do/airbnb-react-styleguide)
+  - ![ru](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Russia.png) **Russian**: [leonidlebedev/javascript-airbnb](https://github.com/leonidlebedev/javascript-airbnb/tree/master/react)
+  - ![th](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Thailand.png) **Thai**: [lvarayut/javascript-style-guide](https://github.com/lvarayut/javascript-style-guide/tree/master/react)
+  - ![tr](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Turkey.png) **Turkish**: [alioguzhan/react-style-guide](https://github.com/alioguzhan/react-style-guide)
+  - ![ua](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Ukraine.png) **Ukrainian**: [ivanzusko/javascript](https://github.com/ivanzusko/javascript/tree/master/react)
+  - ![vn](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Vietnam.png) **Vietnam**: [uetcodecamp/jsx-style-guide](https://github.com/UETCodeCamp/jsx-style-guide)
 
 ## Differences from Airbnb Style Guide
 
   - Allow multiple components in the same file.
   - Use `React.createClass` instead of `class extends React.Component`.
   - Allow (but don't require) stateless React functions.
-  - Use `.js`, not `.jsx`, for React component files.
   - Include explicit `true` values in JSX attributes.
   - For component ordering, move miscellaneous methods/properties above event handlers and remove getter/setter group.
 
