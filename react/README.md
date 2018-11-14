@@ -34,36 +34,35 @@ This style guide is mostly based on the standards that are currently prevalent i
 
 ## Class vs `React.createClass` vs stateless
 
-  - If you have internal state and/or refs, use `React.createClass`. Avoid `class extends React.Component` as it does not yet support nice features like mixins and method auto-binding. eslint: [`react/prefer-es6-class`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-es6-class.md) [`react/prefer-stateless-function`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-stateless-function.md)
+  - If you have internal state and/or refs, prefer `class extends React.Component` over `React.createClass`. eslint: [`react/prefer-es6-class`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-es6-class.md) [`react/prefer-stateless-function`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-stateless-function.md)
 
     ```jsx
     // bad
+    const Listing = React.createClass({
+      // ...
+      render() {
+        return <div>{this.state.hello}</div>;
+      }
+    });
+
+    // good
     class Listing extends React.Component {
       // ...
       render() {
         return <div>{this.state.hello}</div>;
       }
     }
-
-    // good
-    const Listing = React.createClass({
-      // ...
-      render() {
-        return <div>{this.state.hello}</div>;
-      }
-    });
     ```
 
     And if you don’t have state or refs, prefer normal functions (not arrow functions) over classes:
 
     ```jsx
-    // okay
-    const Listing = React.createClass({
-      // ...
+    // bad
+    class Listing extends React.Component {
       render() {
-        return <div>{this.state.hello}</div>;
+        return <div>{this.props.hello}</div>;
       }
-    });
+    }
 
     // bad (relying on function name inference is discouraged)
     const Listing = ({ hello }) => (
@@ -728,7 +727,6 @@ We don’t recommend using indexes for keys if the order of items may change.
 ## Differences from Airbnb Style Guide
 
   - Allow multiple components in the same file.
-  - Use `React.createClass` instead of `class extends React.Component`.
   - Allow (but don't require) stateless React functions.
   - Include explicit `true` values in JSX attributes.
   - For component ordering, move miscellaneous methods/properties above event handlers and remove getter/setter group.
